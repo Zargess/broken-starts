@@ -1,0 +1,20 @@
+# Setting up namespace
+namespace = zarg_shattered_ring_setup
+
+### This populates the origin capitals with the appropriate districts and buildings
+
+planet_event = {
+	id = zarg_shattered_ring_setup.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_planet_flag = zarg_ring_start_system
+			}
+            zarg_cleanup_ring_homeworld = yes
+            zarg_setup_ring_homeworld = yes
+        }
+	}
+}

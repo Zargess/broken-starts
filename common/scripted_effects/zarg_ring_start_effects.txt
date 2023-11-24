@@ -1,0 +1,212 @@
+zarg_cleanup_ring_homeworld = {
+	# Clean districts
+	remove_all_districts = yes
+
+	# Clean deposits
+	remove_deposit = d_strip_mine
+	remove_deposit = d_unsupervised_settlement
+	remove_deposit = d_collapsed_burrows
+	remove_deposit = d_failing_infrastructure
+	remove_deposit = d_failing_infrastructure
+	remove_deposit = d_exterminators_ruins
+	remove_deposit = d_former_battlefield
+	remove_deposit = d_assimilators_ruins
+	remove_deposit = d_machine_empire_ruins
+	remove_deposit = d_decrepit_dwellings
+
+	while = {
+		limit = {
+			planet_size > 10
+		}
+		change_planet_size = -1
+	}
+}
+
+zarg_setup_ring_homeworld = {
+	add_district_and_planet_size_if_needed_effect = {
+		district = district_rw_farming
+	}
+
+	add_deposit = d_arcane_generator
+	add_deposit = d_old_decrepit_tunnels_1
+	add_deposit = d_old_decrepit_tunnels_2
+	add_deposit = d_old_decrepit_tunnels_3
+	while = {
+		count = 4
+		remove_deposit = d_hibernating_lithoids
+	}
+
+	if = {
+		limit = {
+			owner = {
+				is_lithoid_empire = yes
+				NOT = { has_civic = civic_hive_devouring_swarm }
+			}
+		}
+		while = {
+			count = 4
+			add_deposit = d_hibernating_lithoids
+		}
+	}
+
+	if = {
+		limit = {
+			owner = {
+				is_lithoid_empire = yes
+				has_civic = civic_hive_devouring_swarm
+			}
+		}
+		while = {
+			count = 2
+			add_deposit = d_hibernating_lithoids
+		}
+	}
+
+	if = {
+		limit = {
+			owner = {
+				is_lithoid_empire = yes
+				is_hive_empire = yes
+			}
+		}
+		remove_district = district_rw_farming
+
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_rw_generator
+		}
+	}
+
+	if = {
+		limit = { owner = { is_regular_empire = yes } }
+
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_rw_city
+		}
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_rw_industrial
+		}
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_rw_commercial
+		}
+	}
+
+	if = {
+		limit = { owner = { is_hive_empire = yes } }
+
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_rw_hive
+		}
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_rw_industrial
+		}
+	}
+
+	if = {
+		limit = { owner = { is_machine_empire = yes } }
+		remove_district = district_rw_farming
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_rw_generator
+		}
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_rw_nexus
+		}
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_rw_industrial
+		}
+
+		#Assimilators
+		if = {
+			limit = { owner = { has_civic = civic_machine_assimilator } }
+			add_district_and_planet_size_if_needed_effect = {
+				district = district_rw_farming
+			}
+			add_deposit = d_old_segment_rubble_1
+			add_deposit = d_old_segment_rubble_2
+		}
+
+		#Servitors
+		if = {
+			limit = { owner = { has_civic = civic_machine_servitor } }
+			add_district_and_planet_size_if_needed_effect = {
+				district = district_rw_farming
+			}
+			add_deposit = d_old_segment_rubble_1
+			add_deposit = d_old_segment_rubble_2
+		}
+	}
+
+	# blockers to reduce effectiveness of the city and industrial segments
+	add_deposit = d_old_segment_rubble_3
+	add_deposit = d_old_segment_rubble_4
+
+	# Additional resources based on empire type and possible subspecies
+	owner = {
+		if = {
+			limit = {
+				has_authority = auth_machine_intelligence
+			}
+			if = {
+				limit = {
+					OR = {
+						has_valid_civic = civic_machine_servitor
+						has_valid_civic = civic_machine_assimilator
+					}
+				}
+				if = {
+					limit = { has_country_flag = lithoid_subspecies }
+					add_resource = { minerals = 100	}
+					add_resource = { energy = 100 }
+				}
+				else = {
+					add_resource = { food = 100	}
+					add_resource = { energy = 100 }
+				}
+			}
+			else = {
+				add_resource = { energy = 200 }
+			}
+		}
+		else = {
+			if = {
+				limit = { is_lithoid_empire = no }
+				if = {
+					limit = { has_country_flag = lithoid_subspecies }
+					add_resource = { food = 100	}
+					add_resource = { minerals = 100 }
+				}
+				else = {
+					add_resource = { food = 200 }
+				}
+			}
+			else = {
+				if = {
+					limit = { has_country_flag = non_lithoid_subspecies }
+					add_resource = { food = 100	}
+					add_resource = { minerals = 100 }
+				}
+				else = {
+					add_resource = { minerals = 200 }
+				}
+			}
+		}
+	}
+}
+
+generate_star_deposit {
+    if = {
+		limit = {
+			owner = {
+				OR = {
+					has_origin = origin_machine
+				}
+			}
+		}
+		owner = {
+			capital_scope = {
+				system_star = {
+					set_deposit = d_energy_10
+				}
+			}
+		}
+	}
+}
